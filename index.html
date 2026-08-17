@@ -20,7 +20,363 @@
   </section>
 
   
-<section class="wrap features">
+<section class="wrap" id="request-service">
+<div class="aw-lead-form-wrap">
+  <style>
+    .aw-lead-form-wrap {
+      max-width: 560px;
+      margin: 0 auto;
+      font-family: "Public Sans", system-ui, sans-serif;
+      color: #0f172a;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-top: 4px solid #34d399;
+      border-radius: 14px;
+      padding: 24px 28px;
+      box-shadow: 0 4px 16px rgba(15,23,42,0.08);
+    }
+    .aw-lead-form-wrap * { box-sizing: border-box; }
+    .aw-lang-toggle {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .aw-lang-btn {
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 14px;
+      border: 1px solid #ccc;
+      background: #fff;
+      color: #555;
+      cursor: pointer;
+    }
+    .aw-lang-btn.active {
+      background: #0f172a;
+      border-color: #0f172a;
+      color: #fff;
+    }
+    .aw-lead-form-wrap h3 {
+      font-family: Archivo, "Public Sans", sans-serif;
+      font-weight: 800;
+      color: #0f172a;
+      font-size: 1.4rem;
+      margin: 0 0 6px;
+    }
+    .aw-lead-form-wrap p.aw-sub {
+      font-size: 0.92rem;
+      color: #555;
+      margin: 0 0 20px;
+      line-height: 1.5;
+    }
+    .aw-field {
+      margin-bottom: 14px;
+    }
+    .aw-field label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .aw-field label .aw-optional {
+      font-weight: 400;
+      color: #888;
+      font-size: 0.8rem;
+    }
+    .aw-field input,
+    .aw-field select,
+    .aw-field textarea {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 0.95rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-family: inherit;
+      background: #fff;
+    }
+    .aw-field input:focus,
+    .aw-field select:focus,
+    .aw-field textarea:focus {
+      outline: none;
+      border-color: #34d399;
+      box-shadow: 0 0 0 3px rgba(52,211,153,0.18);
+    }
+    .aw-field textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .aw-row-2 {
+      display: flex;
+      gap: 12px;
+    }
+    .aw-row-2 .aw-field { flex: 1; }
+    @media (max-width: 480px) {
+      .aw-row-2 { flex-direction: column; gap: 0; }
+    }
+    .aw-helper {
+      font-size: 0.78rem;
+      color: #888;
+      margin: -8px 0 14px;
+    }
+    .aw-disclosure {
+      font-size: 0.8rem;
+      color: #475569;
+      line-height: 1.5;
+      margin: 4px 0 18px;
+      padding: 10px 12px;
+      background: #f1f5f9;
+      border-radius: 8px;
+      border-left: 3px solid #34d399;
+    }
+    .aw-submit-btn {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: Archivo, "Public Sans", sans-serif;
+      color: #0f172a;
+      background: #34d399;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .aw-submit-btn:hover { background: #2bc48a; }
+    .aw-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .aw-status {
+      margin-top: 12px;
+      font-size: 0.9rem;
+      display: none;
+    }
+    .aw-status.success { color: #0f766e; display: block; }
+    .aw-status.error { color: #b3261e; display: block; }
+  </style>
+
+  <div class="aw-lang-toggle">
+    <button type="button" class="aw-lang-btn active" id="aw-lang-en" onclick="awSetLang('en')">EN</button>
+    <button type="button" class="aw-lang-btn" id="aw-lang-fr" onclick="awSetLang('fr')">FR</button>
+  </div>
+
+  <h3 id="aw-title">Request local well service</h3>
+  <p class="aw-sub" id="aw-subtitle">
+    Fill in what you can — name, phone or email, and the type of job are all we
+    really need to get you connected with a local well contractor. Everything
+    else is optional and just helps them prepare a better quote.
+  </p>
+
+  <form id="aw-lead-form" action="https://formsubmit.co/ajax/info@acreageseptic.ca" method="POST">
+    <input type="hidden" name="language" id="aw-language-field" value="en">
+    <input type="hidden" name="site" value="AcreageWell">
+
+    <div class="aw-row-2">
+      <div class="aw-field">
+        <label for="aw-name" id="aw-label-name">Full name</label>
+        <input type="text" id="aw-name" name="name" required autocomplete="name">
+      </div>
+      <div class="aw-field">
+        <label for="aw-jobtype" id="aw-label-jobtype">Type of job</label>
+        <select id="aw-jobtype" name="job_type" required>
+          <option value="" id="aw-jobtype-placeholder" disabled selected>Select one</option>
+          <option value="Drilling" data-en="Well drilling / new well" data-fr="Forage de puits / nouveau puits">Well drilling / new well</option>
+          <option value="Pump repair" data-en="Pump repair or replacement" data-fr="Réparation ou remplacement de la pompe">Pump repair or replacement</option>
+          <option value="Water testing" data-en="Water testing" data-fr="Analyse de l'eau">Water testing</option>
+          <option value="Inspection" data-en="Well inspection" data-fr="Inspection du puits">Well inspection</option>
+          <option value="Not sure" data-en="Not sure yet" data-fr="Pas certain encore">Not sure yet</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="aw-row-2">
+      <div class="aw-field">
+        <label for="aw-phone" id="aw-label-phone">Phone</label>
+        <input type="tel" id="aw-phone" name="phone" autocomplete="tel">
+      </div>
+      <div class="aw-field">
+        <label for="aw-email" id="aw-label-email">Email</label>
+        <input type="email" id="aw-email" name="email" autocomplete="email">
+      </div>
+    </div>
+    <p class="aw-helper" id="aw-contact-helper">
+      Please provide at least a phone number or an email so a contractor can reach you.
+    </p>
+
+    <div class="aw-field">
+      <label for="aw-town" id="aw-label-town">Property location / nearest town <span class="aw-optional" id="aw-optional-town">(optional)</span></label>
+      <input type="text" id="aw-town" name="property_location" placeholder="e.g. Chénéville, QC">
+    </div>
+
+    <div class="aw-field">
+      <label for="aw-timeline" id="aw-label-timeline">Timeline <span class="aw-optional" id="aw-optional-timeline">(optional)</span></label>
+      <select id="aw-timeline" name="timeline">
+        <option value="" id="aw-timeline-placeholder">Select one</option>
+        <option value="ASAP" data-en="ASAP / urgent" data-fr="Urgent / dès que possible">ASAP / urgent</option>
+        <option value="Few weeks" data-en="Within a few weeks" data-fr="D'ici quelques semaines">Within a few weeks</option>
+        <option value="This year" data-en="Sometime this year" data-fr="Quelque part cette année">Sometime this year</option>
+        <option value="Researching" data-en="Just researching for now" data-fr="Je me renseigne pour l'instant">Just researching for now</option>
+      </select>
+    </div>
+
+    <div class="aw-field">
+      <label for="aw-details" id="aw-label-details">Additional details <span class="aw-optional" id="aw-optional-details">(optional)</span></label>
+      <textarea id="aw-details" name="details" placeholder="Well depth/age if known, water issues (low pressure, taste, odor, dryness), access notes — anything that helps a contractor prepare a quote."></textarea>
+    </div>
+
+    <div class="aw-disclosure" id="aw-disclosure">
+      AcreageWell.com is a free local-referral service. We don't charge you or the
+      contractor for this — we simply pass your request to a local, independent
+      well professional in your area so they can contact you directly and prepare
+      a quote. You'll deal with and pay the contractor directly; we're not involved
+      in the job itself.
+    </div>
+
+    <button type="submit" class="aw-submit-btn" id="aw-submit-btn">Send my request</button>
+    <div class="aw-status" id="aw-status"></div>
+  </form>
+</div>
+
+<script>
+(function () {
+  var translations = {
+    en: {
+      title: 'Request local well service',
+      subtitle: 'Fill in what you can — name, phone or email, and the type of job are all we really need to get you connected with a local well contractor. Everything else is optional and just helps them prepare a better quote.',
+      labelName: 'Full name',
+      labelJobType: 'Type of job',
+      jobTypePlaceholder: 'Select one',
+      labelPhone: 'Phone',
+      labelEmail: 'Email',
+      contactHelper: 'Please provide at least a phone number or an email so a contractor can reach you.',
+      labelTown: 'Property location / nearest town',
+      optionalTown: '(optional)',
+      townPlaceholder: 'e.g. Chénéville, QC',
+      labelTimeline: 'Timeline',
+      optionalTimeline: '(optional)',
+      timelinePlaceholder: 'Select one',
+      labelDetails: 'Additional details',
+      optionalDetails: '(optional)',
+      detailsPlaceholder: 'Well depth/age if known, water issues (low pressure, taste, odor, dryness), access notes — anything that helps a contractor prepare a quote.',
+      disclosure: "AcreageWell.com is a free local-referral service. We don't charge you or the contractor for this — we simply pass your request to a local, independent well professional in your area so they can contact you directly and prepare a quote. You'll deal with and pay the contractor directly; we're not involved in the job itself.",
+      submit: 'Send my request',
+      sending: 'Sending...',
+      errorContact: 'Please provide at least a phone number or an email address.',
+      success: "Thanks — we've got your request and will pass it to a local well contractor shortly.",
+      errorGeneric: 'Something went wrong sending your request. Please try again, or email us directly.'
+    },
+    fr: {
+      title: 'Demande de service de puits',
+      subtitle: "Remplissez ce que vous pouvez — le nom, un téléphone ou courriel, et le type de travaux sont tout ce dont nous avons vraiment besoin pour vous mettre en contact avec un entrepreneur local. Le reste est optionnel et aide simplement à préparer une meilleure soumission.",
+      labelName: 'Nom complet',
+      labelJobType: 'Type de travaux',
+      jobTypePlaceholder: 'Choisir une option',
+      labelPhone: 'Téléphone',
+      labelEmail: 'Courriel',
+      contactHelper: "Veuillez fournir au moins un numéro de téléphone ou un courriel pour qu'un entrepreneur puisse vous joindre.",
+      labelTown: 'Emplacement de la propriété / municipalité la plus proche',
+      optionalTown: '(optionnel)',
+      townPlaceholder: 'ex. Chénéville, QC',
+      labelTimeline: 'Échéancier',
+      optionalTimeline: '(optionnel)',
+      timelinePlaceholder: 'Choisir une option',
+      labelDetails: 'Détails supplémentaires',
+      optionalDetails: '(optionnel)',
+      detailsPlaceholder: "Profondeur/âge du puits si connu, problèmes d'eau (pression faible, goût, odeur, puits à sec), accès au terrain — tout ce qui peut aider un entrepreneur à préparer une soumission.",
+      disclosure: "AcreageWell.com est un service de référencement local gratuit. Ce n'est facturé ni à vous ni à l'entrepreneur — nous transmettons simplement votre demande à un professionnel du puits local et indépendant dans votre secteur, afin qu'il communique directement avec vous pour préparer une soumission. Vous transigez et payez directement avec l'entrepreneur; nous ne sommes pas impliqués dans les travaux eux-mêmes.",
+      submit: 'Envoyer ma demande',
+      sending: 'Envoi en cours...',
+      errorContact: 'Veuillez fournir au moins un numéro de téléphone ou un courriel.',
+      success: 'Merci — nous avons bien reçu votre demande et la transmettrons sous peu à un entrepreneur local.',
+      errorGeneric: "Une erreur s'est produite lors de l'envoi. Veuillez réessayer, ou nous écrire directement."
+    }
+  };
+
+  var currentLang = 'en';
+  var form = document.getElementById('aw-lead-form');
+  var statusEl = document.getElementById('aw-status');
+  var btn = document.getElementById('aw-submit-btn');
+  var langField = document.getElementById('aw-language-field');
+
+  window.awSetLang = function (lang) {
+    currentLang = lang;
+    var t = translations[lang];
+
+    document.getElementById('aw-title').textContent = t.title;
+    document.getElementById('aw-subtitle').textContent = t.subtitle;
+    document.getElementById('aw-label-name').firstChild.textContent = t.labelName + ' ';
+    document.getElementById('aw-label-jobtype').firstChild.textContent = t.labelJobType + ' ';
+    document.getElementById('aw-jobtype-placeholder').textContent = t.jobTypePlaceholder;
+    document.getElementById('aw-label-phone').textContent = t.labelPhone;
+    document.getElementById('aw-label-email').textContent = t.labelEmail;
+    document.getElementById('aw-contact-helper').textContent = t.contactHelper;
+    document.getElementById('aw-label-town').firstChild.textContent = t.labelTown + ' ';
+    document.getElementById('aw-optional-town').textContent = t.optionalTown;
+    document.getElementById('aw-town').setAttribute('placeholder', t.townPlaceholder);
+    document.getElementById('aw-label-timeline').firstChild.textContent = t.labelTimeline + ' ';
+    document.getElementById('aw-optional-timeline').textContent = t.optionalTimeline;
+    document.getElementById('aw-timeline-placeholder').textContent = t.timelinePlaceholder;
+    document.getElementById('aw-label-details').firstChild.textContent = t.labelDetails + ' ';
+    document.getElementById('aw-optional-details').textContent = t.optionalDetails;
+    document.getElementById('aw-details').setAttribute('placeholder', t.detailsPlaceholder);
+    document.getElementById('aw-disclosure').textContent = t.disclosure;
+    document.getElementById('aw-submit-btn').textContent = t.submit;
+
+    document.querySelectorAll('#aw-jobtype option[data-' + lang + ']').forEach(function (opt) {
+      opt.textContent = opt.getAttribute('data-' + lang);
+    });
+    document.querySelectorAll('#aw-timeline option[data-' + lang + ']').forEach(function (opt) {
+      opt.textContent = opt.getAttribute('data-' + lang);
+    });
+
+    langField.value = lang;
+    document.getElementById('aw-lang-en').classList.toggle('active', lang === 'en');
+    document.getElementById('aw-lang-fr').classList.toggle('active', lang === 'fr');
+    statusEl.className = 'aw-status';
+    statusEl.textContent = '';
+  };
+
+  form.addEventListener('submit', function (e) {
+    var t = translations[currentLang];
+    var phone = form.querySelector('#aw-phone').value.trim();
+    var email = form.querySelector('#aw-email').value.trim();
+
+    if (!phone && !email) {
+      e.preventDefault();
+      statusEl.textContent = t.errorContact;
+      statusEl.className = 'aw-status error';
+      return;
+    }
+
+    e.preventDefault();
+    btn.disabled = true;
+    btn.textContent = t.sending;
+
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    }).then(function (response) {
+      if (response.ok) {
+        statusEl.textContent = t.success;
+        statusEl.className = 'aw-status success';
+        form.reset();
+        awSetLang(currentLang);
+      } else {
+        throw new Error('Submit failed');
+      }
+    }).catch(function () {
+      statusEl.textContent = t.errorGeneric;
+      statusEl.className = 'aw-status error';
+    }).finally(function () {
+      btn.disabled = false;
+      btn.textContent = t.submit;
+    });
+  });
+})();
+</script>
+</section>
+
+
+  <section class="wrap features">
   <div class="feat"><span class="fi"><svg class="ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span><div><strong>Registered drillers</strong><span>Rigs registered with the provincial regulator — the credential that matters.</span></div></div>
   <div class="feat"><span class="fi"><svg class="ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h11v8H3z"/><path d="M14 10h4l3 3v2h-7z"/><circle cx="7" cy="17" r="1.6"/><circle cx="17" cy="17" r="1.6"/></svg></span><div><strong>They come to you</strong><span>A rig routinely travels 400–500 km, so rural and remote acreages are covered.</span></div></div>
   <div class="feat"><span class="fi"><svg class="ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></span><div><strong>No cost to call</strong><span>We connect you with the operator; you deal with them directly on price.</span></div></div>
